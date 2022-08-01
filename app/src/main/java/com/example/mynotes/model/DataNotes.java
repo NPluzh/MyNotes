@@ -1,14 +1,14 @@
-package com.example.mynotes;
+package com.example.mynotes.model;
 
 import java.util.Date;
 
 public class DataNotes {
-    private String titleNotes;
+    private String headingNotes;
     private String descriptionNotes;
     private Date dateNotes;
 
-    public DataNotes(String titleNotes, String descriptionNotes) {
-        this.titleNotes = titleNotes;
+    public DataNotes(String headingNotes, String descriptionNotes) {
+        this.headingNotes = headingNotes;
         this.descriptionNotes = descriptionNotes;
         this.dateNotes = new Date();
     }

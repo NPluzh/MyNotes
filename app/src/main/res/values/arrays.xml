@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="heading_notes">
+        <item>Сделать д/з </item>
+        <item>Собрать вещи</item>
+        <item>Полить цветы</item>
+        <item>Покормить кота</item>
+    </string-array>
+</resources>
