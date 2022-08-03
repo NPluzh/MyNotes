@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        NotesHeadingFragment headingFragment = new NotesHeadingFragment();
+        HeadingFragment headingFragment = new HeadingFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container,headingFragment)
