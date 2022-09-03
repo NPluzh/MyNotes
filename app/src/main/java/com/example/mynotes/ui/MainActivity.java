@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState == null){
             NoteRepository notes = NoteRepository.getInstance();
-            notes.defaultInitialization(this);
+            //notes.defaultInitialization(this);// инициализация через массив в ресурсах
+            notes.inizializationByCicle(10);
             HeadingFragment headingFragment = new HeadingFragment();
             getSupportFragmentManager()
                     .beginTransaction()

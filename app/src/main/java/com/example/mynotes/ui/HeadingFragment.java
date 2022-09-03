@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,24 +54,24 @@ public class HeadingFragment extends Fragment {
             textHeading.setText(notes.getNoteById(i).getHeadingNotes());
             textHeading.setTextSize(30);
             layoutView.addView(textHeading);
-            int index = i;
+            int finalI = i;
             textHeading.setOnClickListener(v -> {
-                showAdvancedFragment(index);//TODO:Сделать подсветку
+                showAdvancedFragment(notes.getNoteById(finalI).getIdNote());//TODO:Сделать подсветку
             });
         }
     }
 
 
-    private void showAdvancedFragment(int index) {
+    private void showAdvancedFragment(int idNote) {
         if (isLandscape()) {
-            showLandscapeAdvancedFragment(index);
+            showLandscapeAdvancedFragment(idNote);
         } else {
-            showPortraitAdvancedFragment(index);
+            showPortraitAdvancedFragment(idNote);
         }
     }
 
-    private void showLandscapeAdvancedFragment(int index) {
-        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(index);//TODO:Попробовать применить паттерн Singleton
+    private void showLandscapeAdvancedFragment(int idNote) {
+        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(idNote);//TODO:Попробовать применить паттерн Singleton
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
@@ -82,8 +81,8 @@ public class HeadingFragment extends Fragment {
 
     }
 
-    private void showPortraitAdvancedFragment(int index) {
-        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(index);
+    private void showPortraitAdvancedFragment(int idNote) {
+        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(idNote);
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()

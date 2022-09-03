@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class NoteRepository {//один объект, который содержит информацию о всех заметках в NoteRepository
     private static NoteRepository INSTANCE;
-    private ArrayList<DataNotes> noteRepository;
+    private ArrayList<Note> noteRepository;
 
     private NoteRepository(){
-        noteRepository = new ArrayList<DataNotes>();
+        noteRepository = new ArrayList<Note>();
     }
 
     public static NoteRepository getInstance(){
@@ -29,16 +29,34 @@ public class NoteRepository {//один объект, который содер�
         String[] advancedNotes = context.getResources().getStringArray(R.array.definition_notes);
 
         for (int i = 0; i < headingNotes.length; i++) {
-            noteRepository.add(new DataNotes(headingNotes[i],advancedNotes[i]));//инициализация элементов заметок
+            noteRepository.add(new Note(headingNotes[i],advancedNotes[i]));//инициализация элементов заметок
         }
     }
 
-    public DataNotes getNoteById(int id){//получение заметки по индексу
-        return noteRepository.get(id);
+    public Note getNoteById(int id) {//получение заметки по индексу
+        for (Note note : noteRepository) {
+            if (note.getIdNote() == id) {
+                return note;
+            }
+        }
+        return null;//если по индексу не нашлось заметки, значит не будем её возвращать
     }
 
     public int getSize(){
         return noteRepository.size();
     }
+
+    public void inizializationByCicle(int quantityNotes){
+        NoteRepository notes = getInstance();//получение или создание нового репозитория, который может быть не пустым из-за неправильного применения
+        for (int i = 0; i < quantityNotes; i++) {
+            notes.putNote(Note.initNoteById(i)); // инициализация заметки по индексу по индексу
+        }
+    }
+
+    public void putNote(Note note){
+        noteRepository.add(note);
+    }
+
+
 
 }
