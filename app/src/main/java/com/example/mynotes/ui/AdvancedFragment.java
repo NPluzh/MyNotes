@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,11 @@ public class AdvancedFragment extends Fragment {
             NoteRepository notes = NoteRepository.getInstance();
             Note note = notes.getNoteById(idNote);
             setNote(view, note);
+
+            Button buttonBack = view.findViewById(R.id.btnBack);
+            buttonBack.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            });
         }
     }
 
@@ -49,8 +56,14 @@ public class AdvancedFragment extends Fragment {
     }
 
     public void setNote(View view, Note note){//метод устанавливает в переданное View указанную заметку
-        TextView textAdvanced = view.findViewById(R.id.text_advanced);//получение View в которую будем устанавливать текст
-        textAdvanced.setText(note.getDescriptionNotes());//установка текста
+        //TextView textAdvanced = view.findViewById(R.id.text_advanced);//получение View в которую будем устанавливать текст
+        //textAdvanced.setText(note.getDescriptionNotes());//установка текста
+
+        EditText title = view.findViewById(R.id.noteTitle);
+        EditText description = view.findViewById(R.id.noteDescription);
+
+        title.setText(note.getHeadingNotes());
+        description.setText(note.getDescriptionNotes());
     }
 
 }
