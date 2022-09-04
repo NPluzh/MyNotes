@@ -1,8 +1,10 @@
 package com.example.mynotes.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,14 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mynotes.R;
 import com.example.mynotes.model.Note;
 import com.example.mynotes.model.NoteRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 
 public class AdvancedFragment extends Fragment {
@@ -56,9 +62,7 @@ public class AdvancedFragment extends Fragment {
 
     }
 
-    public void setNote(View view, Note note){//метод устанавливает в переданное View указанную заметку
-        //TextView textAdvanced = view.findViewById(R.id.text_advanced);//получение View в которую будем устанавливать текст
-        //textAdvanced.setText(note.getDescriptionNotes());//установка текста
+    public void setNote(View view, Note note){
 
         EditText title = view.findViewById(R.id.noteTitle);
         EditText description = view.findViewById(R.id.noteDescription);
@@ -73,6 +77,10 @@ public class AdvancedFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     note.setTitleNote(title.getText().toString());
+                    if(isLandscape()){
+                        updateData();
+                    }
+
             }
 
             @Override
@@ -83,7 +91,6 @@ public class AdvancedFragment extends Fragment {
         description.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     note.setDescriptionNote(description.getText().toString());
@@ -94,4 +101,29 @@ public class AdvancedFragment extends Fragment {
         });
     }
 
+    private void updateData() {
+        Log.d("MY_TAG","call updateData()");
+        HeadingFragment headingFragment = new HeadingFragment();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,headingFragment)
+                .commit();
+    }
+
+
+    private HeadingFragment getCurrentHeadingFragment() {
+        HeadingFragment headingFragment = null;
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        List<Fragment> currentFragments = fragmentManager.getFragments();
+        for (Fragment fragment:currentFragments) {
+            if(fragment instanceof HeadingFragment){
+                headingFragment = (HeadingFragment) fragment;
+            }
+        }
+        return headingFragment;
+    }
+
+    private boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
 }

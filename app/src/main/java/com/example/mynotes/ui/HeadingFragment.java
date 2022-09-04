@@ -19,6 +19,9 @@ import com.example.mynotes.model.NoteRepository;
 public class HeadingFragment extends Fragment {
 
 
+    View dataContainer;
+
+
     // При создании фрагмента укажем его макет
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,//создание интерфейса пользователя
@@ -34,6 +37,7 @@ public class HeadingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //TODO:добавть очистку бекстека
 
+            dataContainer = view;
             initContent(view);
 
         Log.d("TAG","Fragment (Heading):   OnViewCreated()");
@@ -45,7 +49,6 @@ public class HeadingFragment extends Fragment {
     }
 
 
-    // создаём список городов на экране из массива в ресурсах
     private void initContent(View view) {
         LinearLayout layoutView = (LinearLayout) view;
         NoteRepository notes = NoteRepository.getInstance();
@@ -91,7 +94,6 @@ public class HeadingFragment extends Fragment {
                 .commit();
 
     }
-
 
 
 
