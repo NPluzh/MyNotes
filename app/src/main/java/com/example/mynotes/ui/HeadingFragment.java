@@ -51,7 +51,7 @@ public class HeadingFragment extends Fragment {
         NoteRepository notes = NoteRepository.getInstance();
         for (int i = 0; i < notes.getSize(); i++) {
             TextView textHeading = new TextView(getContext());
-            textHeading.setText(notes.getNoteById(i).getHeadingNotes());
+            textHeading.setText(notes.getNoteById(i).getTitleNote());
             textHeading.setTextSize(30);
             layoutView.addView(textHeading);
             int finalI = i;

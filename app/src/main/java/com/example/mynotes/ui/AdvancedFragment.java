@@ -1,12 +1,13 @@
 package com.example.mynotes.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,8 +63,35 @@ public class AdvancedFragment extends Fragment {
         EditText title = view.findViewById(R.id.noteTitle);
         EditText description = view.findViewById(R.id.noteDescription);
 
-        title.setText(note.getHeadingNotes());
-        description.setText(note.getDescriptionNotes());
+        title.setText(note.getTitleNote());
+        description.setText(note.getDescriptionNote());
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    note.setTitleNote(title.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    note.setDescriptionNote(description.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {    }
+        });
     }
 
 }
