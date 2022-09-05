@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.mynotes.R;
+import com.example.mynotes.model.Note;
 import com.example.mynotes.model.NoteRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HeadingFragment extends Fragment {
 
@@ -26,7 +29,6 @@ public class HeadingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,//создание интерфейса пользователя
                              Bundle savedInstanceState) {
-        Log.d("TAG","Fragment (Heading):   OnCreateView()");
         return inflater.inflate(R.layout.fragment_heading, container, false);
     }
 
@@ -37,11 +39,41 @@ public class HeadingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //TODO:добавть очистку бекстека
 
-            dataContainer = view;
-            initContent(view);
+        dataContainer = view.findViewById(R.id.data_container);
+        initContent(dataContainer);
+        FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {//слушатель на float button
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getContext(),
+                        "Создана новая заметка", Toast.LENGTH_SHORT);
+                toast.show();
+                Note newNote = createNewNote();//добавление новой заметки в репозиторий
+                if (isLandscape()) {
+                    updateData();//если в ландшафтной ориентации то обновляем фрагмент с заметками
+                } else {
+                    showAdvancedFragment(newNote.getIdNote());//если в вертикальной ориентации, то показзываем вновь созданную заметку
+                }
 
-        Log.d("TAG","Fragment (Heading):   OnViewCreated()");
+            }
+        });
 
+    }
+
+    private void updateData() {
+        Log.d("MY_TAG", "call updateData()");
+        HeadingFragment headingFragment = new HeadingFragment();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, headingFragment)
+                .commit();
+    }
+
+    private Note createNewNote() {
+        Note newNote = new Note("Новая заметка", "");
+        NoteRepository notes = NoteRepository.getInstance();
+        notes.putNote(newNote);
+        return newNote;
     }
 
     private boolean isLandscape() {
@@ -94,7 +126,6 @@ public class HeadingFragment extends Fragment {
                 .commit();
 
     }
-
 
 
 }
