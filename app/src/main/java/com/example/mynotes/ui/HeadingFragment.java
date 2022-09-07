@@ -4,6 +4,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -32,11 +34,14 @@ public class HeadingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_heading, container, false);
     }
 
+
+
     // Этот метод вызывается, когда макет экрана создан и готов к отображениюинформации. Создаем список городов
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle//инициализация интерфейса
             savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //TODO:добавть очистку бекстека
 
         dataContainer = view.findViewById(R.id.data_container);

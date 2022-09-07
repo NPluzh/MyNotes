@@ -6,6 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,6 +42,7 @@ public class AdvancedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle
             savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);//!!!!!!!!!!!!!!!!
         Bundle arguments = getArguments();
         if (arguments != null) {
             int idNote = arguments.getInt(ARG_ID_NOTE);//получение индекса заметки которую нужно отобразить в фрагменте детализации заметки//
@@ -60,6 +64,26 @@ public class AdvancedFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_advanced_fragment,menu);
+        menu.findItem(R.id.action_about).setVisible(false);
+        menu.findItem(R.id.action_exit).setVisible(false);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case (R.id.action_back): {
+                requireActivity().getSupportFragmentManager().popBackStack();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setNote(View view, Note note){
@@ -126,4 +150,6 @@ public class AdvancedFragment extends Fragment {
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
+
+
 }
