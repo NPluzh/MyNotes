@@ -2,6 +2,7 @@ package com.example.mynotes.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container,headingFragment)
                     .commit();
         }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
     }
 
