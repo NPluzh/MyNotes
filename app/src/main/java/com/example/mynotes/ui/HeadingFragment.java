@@ -15,16 +15,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.mynotes.R;
+import com.example.mynotes.model.Note;
 import com.example.mynotes.model.NoteRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HeadingFragment extends Fragment {
+
+
+    View dataContainer;
 
 
     // При создании фрагмента укажем его макет
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,//создание интерфейса пользователя
                              Bundle savedInstanceState) {
-        Log.d("TAG","Fragment (Heading):   OnCreateView()");
         return inflater.inflate(R.layout.fragment_heading, container, false);
     }
 
@@ -35,10 +39,41 @@ public class HeadingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //TODO:добавть очистку бекстека
 
-            initContent(view);
+        dataContainer = view.findViewById(R.id.data_container);
+        initContent(dataContainer);
+        FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {//слушатель на float button
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getContext(),
+                        "Создана новая заметка", Toast.LENGTH_SHORT);
+                toast.show();
+                Note newNote = createNewNote();//добавление новой заметки в репозиторий
+                if (isLandscape()) {
+                    updateData();//если в ландшафтной ориентации то обновляем фрагмент с заметками
+                } else {
+                    showAdvancedFragment(newNote.getIdNote());//если в вертикальной ориентации, то показзываем вновь созданную заметку
+                }
 
-        Log.d("TAG","Fragment (Heading):   OnViewCreated()");
+            }
+        });
 
+    }
+
+    private void updateData() {
+        Log.d("MY_TAG", "call updateData()");
+        HeadingFragment headingFragment = new HeadingFragment();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, headingFragment)
+                .commit();
+    }
+
+    private Note createNewNote() {
+        Note newNote = new Note("Новая заметка", "");
+        NoteRepository notes = NoteRepository.getInstance();
+        notes.putNote(newNote);
+        return newNote;
     }
 
     private boolean isLandscape() {
@@ -46,33 +81,32 @@ public class HeadingFragment extends Fragment {
     }
 
 
-    // создаём список городов на экране из массива в ресурсах
     private void initContent(View view) {
         LinearLayout layoutView = (LinearLayout) view;
         NoteRepository notes = NoteRepository.getInstance();
         for (int i = 0; i < notes.getSize(); i++) {
             TextView textHeading = new TextView(getContext());
-            textHeading.setText(notes.getNoteById(i).getHeadingNotes());
+            textHeading.setText(notes.getNoteById(i).getTitleNote());
             textHeading.setTextSize(30);
             layoutView.addView(textHeading);
-            int index = i;
+            int finalI = i;
             textHeading.setOnClickListener(v -> {
-                showAdvancedFragment(index);//TODO:Сделать подсветку
+                showAdvancedFragment(notes.getNoteById(finalI).getIdNote());//TODO:Сделать подсветку
             });
         }
     }
 
 
-    private void showAdvancedFragment(int index) {
+    private void showAdvancedFragment(int idNote) {
         if (isLandscape()) {
-            showLandscapeAdvancedFragment(index);
+            showLandscapeAdvancedFragment(idNote);
         } else {
-            showPortraitAdvancedFragment(index);
+            showPortraitAdvancedFragment(idNote);
         }
     }
 
-    private void showLandscapeAdvancedFragment(int index) {
-        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(index);//TODO:Попробовать применить паттерн Singleton
+    private void showLandscapeAdvancedFragment(int idNote) {
+        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(idNote);//TODO:Попробовать применить паттерн Singleton
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
@@ -82,8 +116,8 @@ public class HeadingFragment extends Fragment {
 
     }
 
-    private void showPortraitAdvancedFragment(int index) {
-        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(index);
+    private void showPortraitAdvancedFragment(int idNote) {
+        AdvancedFragment advancedFragment = AdvancedFragment.newInstance(idNote);
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
@@ -92,8 +126,6 @@ public class HeadingFragment extends Fragment {
                 .commit();
 
     }
-
-
 
 
 }
