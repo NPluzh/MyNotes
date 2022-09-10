@@ -6,4 +6,5 @@
     <string name="about">О программе</string>
     <string name="exit">Выход</string>
     <string name="about_developers">Приложение заметок</string>
+    <string name="title_delete">Удалить</string>
 </resources>

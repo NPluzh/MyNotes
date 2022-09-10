@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class NoteRepository {//один объект, который содержит информацию о всех заметках в NoteRepository
     private static NoteRepository INSTANCE;
-    private ArrayList<Note> noteRepository;
+    private ArrayList<Note> noteListRepository;
 
     private NoteRepository(){
-        noteRepository = new ArrayList<Note>();
+        noteListRepository = new ArrayList<Note>();
     }
 
     public static NoteRepository getInstance(){
@@ -29,12 +29,12 @@ public class NoteRepository {//один объект, который содер�
         String[] advancedNotes = context.getResources().getStringArray(R.array.definition_notes);
 
         for (int i = 0; i < headingNotes.length; i++) {
-            noteRepository.add(new Note(headingNotes[i],advancedNotes[i]));//инициализация элементов заметок
+            noteListRepository.add(new Note(headingNotes[i],advancedNotes[i]));//инициализация элементов заметок
         }
     }
 
     public Note getNoteById(int id) {//получение заметки по индексу
-        for (Note note : noteRepository) {
+        for (Note note : noteListRepository) {
             if (note.getIdNote() == id) {
                 return note;
             }
@@ -43,7 +43,7 @@ public class NoteRepository {//один объект, который содер�
     }
 
     public int getSize(){
-        return noteRepository.size();
+        return noteListRepository.size();
     }
 
     public void inizializationByCicle(int quantityNotes){
@@ -54,9 +54,16 @@ public class NoteRepository {//один объект, который содер�
     }
 
     public void putNote(Note note){
-        noteRepository.add(note);
+        noteListRepository.add(note);
     }
 
 
+    public ArrayList<Note> getListNotes(){
+        return noteListRepository;
+    }
 
+
+    public void deleteNote(int idNote) {
+        noteListRepository.remove(getNoteById(idNote));
+    }
 }
