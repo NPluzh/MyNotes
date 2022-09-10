@@ -7,4 +7,6 @@
     <string name="exit">Выход</string>
     <string name="about_developers">Приложение заметок</string>
     <string name="title_delete">Удалить</string>
+    <string name="burger_open">burger open</string>
+    <string name="burger_close">burger close</string>
 </resources>
