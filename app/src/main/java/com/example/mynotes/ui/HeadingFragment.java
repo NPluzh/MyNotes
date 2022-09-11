@@ -1,12 +1,17 @@
 package com.example.mynotes.ui;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +23,8 @@ import com.example.mynotes.R;
 import com.example.mynotes.model.Note;
 import com.example.mynotes.model.NoteRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class HeadingFragment extends Fragment {
 
@@ -32,11 +39,14 @@ public class HeadingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_heading, container, false);
     }
 
+
+
     // Этот метод вызывается, когда макет экрана создан и готов к отображениюинформации. Создаем список городов
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle//инициализация интерфейса
             savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //TODO:добавть очистку бекстека
 
         dataContainer = view.findViewById(R.id.data_container);
@@ -60,6 +70,8 @@ public class HeadingFragment extends Fragment {
 
     }
 
+
+
     private void updateData() {
         Log.d("MY_TAG", "call updateData()");
         HeadingFragment headingFragment = new HeadingFragment();
@@ -81,19 +93,51 @@ public class HeadingFragment extends Fragment {
     }
 
 
+
+
     private void initContent(View view) {
         LinearLayout layoutView = (LinearLayout) view;
-        NoteRepository notes = NoteRepository.getInstance();
-        for (int i = 0; i < notes.getSize(); i++) {
+        NoteRepository notesRepository = NoteRepository.getInstance();
+        ArrayList<Note> notes = notesRepository.getListNotes();
+        for (Note note: notes ) {
             TextView textHeading = new TextView(getContext());
-            textHeading.setText(notes.getNoteById(i).getTitleNote());
+            textHeading.setText(note.getTitleNote());
             textHeading.setTextSize(30);
             layoutView.addView(textHeading);
-            int finalI = i;
             textHeading.setOnClickListener(v -> {
-                showAdvancedFragment(notes.getNoteById(finalI).getIdNote());//TODO:Сделать подсветку
+                showAdvancedFragment(note.getIdNote());//TODO:Сделать подсветку
             });
+            initPopupMenu(layoutView, textHeading,note.getIdNote());
+
         }
+    }
+
+    private void initPopupMenu(LinearLayout rootView, TextView noteTextView,int idNote){
+        noteTextView.setOnLongClickListener(v -> {
+            Activity activity = requireActivity();
+            PopupMenu popupMenu = new PopupMenu(activity, noteTextView);
+            activity.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getItemId()){
+                        case (R.id.action_popup_delete):
+                            deleteNote(idNote);
+                    }
+                    return true;
+                }
+            });
+            popupMenu.show();
+            return true;
+        });
+
+    }
+
+    private void deleteNote(int idNote) {
+        NoteRepository notesRepository = NoteRepository.getInstance();
+        notesRepository.deleteNote(idNote);
+        updateData();
+
     }
 
 
@@ -125,6 +169,24 @@ public class HeadingFragment extends Fragment {
                 .addToBackStack("")
                 .commit();
 
+    }
+
+
+    @Deprecated
+    private void initContent1(View view) {
+        LinearLayout layoutView = (LinearLayout) view;
+        NoteRepository notes = NoteRepository.getInstance();
+        for (int i = 0; i < notes.getSize(); i++) {
+            TextView textHeading = new TextView(getContext());
+            textHeading.setText(notes.getNoteById(i).getTitleNote());
+            textHeading.setTextSize(30);
+            layoutView.addView(textHeading);
+            int finalI = i;
+            textHeading.setOnClickListener(v -> {
+                showAdvancedFragment(notes.getNoteById(finalI).getIdNote());//TODO:Сделать подсветку
+            });
+            //initPopupMenu(layoutView,textHeading,);
+        }
     }
 
 
